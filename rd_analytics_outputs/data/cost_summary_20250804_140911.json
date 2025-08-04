@@ -1,0 +1,70 @@
+{
+  "total_api_calls": 6,
+  "total_input_tokens": 6951,
+  "total_output_tokens": 4257,
+  "total_tokens": 11208,
+  "total_cost": 0.084708,
+  "average_cost_per_call": 0.014118,
+  "calls": [
+    {
+      "timestamp": "2025-08-04T14:09:22.198587",
+      "operation": "experimental_data_analysis",
+      "model": "claude-3-5-sonnet-20241022",
+      "input_tokens": 306,
+      "output_tokens": 597,
+      "input_cost": 0.000918,
+      "output_cost": 0.008955,
+      "total_cost": 0.009873
+    },
+    {
+      "timestamp": "2025-08-04T14:09:32.793948",
+      "operation": "results_interpretation",
+      "model": "claude-3-5-sonnet-20241022",
+      "input_tokens": 274,
+      "output_tokens": 477,
+      "input_cost": 0.000822,
+      "output_cost": 0.007155,
+      "total_cost": 0.007977
+    },
+    {
+      "timestamp": "2025-08-04T14:09:48.274281",
+      "operation": "decision_matrix_generation",
+      "model": "claude-3-5-sonnet-20241022",
+      "input_tokens": 245,
+      "output_tokens": 955,
+      "input_cost": 0.000735,
+      "output_cost": 0.014325,
+      "total_cost": 0.01506
+    },
+    {
+      "timestamp": "2025-08-04T14:10:02.049198",
+      "operation": "experiment_design",
+      "model": "claude-3-5-sonnet-20241022",
+      "input_tokens": 258,
+      "output_tokens": 740,
+      "input_cost": 0.000774,
+      "output_cost": 0.0111,
+      "total_cost": 0.011874
+    },
+    {
+      "timestamp": "2025-08-04T14:10:16.393118",
+      "operation": "metrics_tracking",
+      "model": "claude-3-5-sonnet-20241022",
+      "input_tokens": 322,
+      "output_tokens": 717,
+      "input_cost": 0.000966,
+      "output_cost": 0.010755,
+      "total_cost": 0.011721
+    },
+    {
+      "timestamp": "2025-08-04T14:10:31.642857",
+      "operation": "technical_report_generation",
+      "model": "claude-3-5-sonnet-20241022",
+      "input_tokens": 5546,
+      "output_tokens": 771,
+      "input_cost": 0.016638,
+      "output_cost": 0.011565,
+      "total_cost": 0.028203
+    }
+  ]
+}

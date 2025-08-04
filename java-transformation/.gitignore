@@ -1,0 +1,134 @@
+# Java Transformation AI Outputs
+# ================================
+
+# Migration Outputs
+migration-outputs/
+
+# Transformation Outputs  
+transformation-outputs/
+
+# AI Session State Files
+PROJECT_CONTEXT.json
+AI_SESSION_MEMORY.json
+
+# Generated Documentation Files
+OLD_JAVA_STRUCTURE.md
+ANALYTIC_OLD_JAVA.md
+GUILDLINE_TO_TRANSFORM.md
+RULE_CODE.md
+CLEAN_ARCHITECH.md
+NEW_JAVA_STRUCTURE.md
+ANALYTIC_NEW_JAVA.md
+TRANSFORMATION_SUMMARY.md
+
+# R&D Analytics Outputs
+analysis/
+logs/
+reports/
+data/
+migration-plans/
+
+# Cost Tracking Files
+cost_*.csv
+cost_*.json
+session_*.json
+
+# Generated Code Samples
+
+entities_generated.java
+repositories_generated.java
+services_generated.java
+controllers_generated.java
+configurations_generated.yml
+
+# Phase Output Directories
+phase1-legacy-analysis/
+phase2-transformation-planning/
+phase3-modern-implementation/
+phase4-code-generation/
+
+# Generated Artifacts
+legacy_analysis_*.md
+modern_architecture_*.md
+migration_plan_*.md
+
+# Multilingual Reports
+information/
+
+# AI Working Files
+*_generated.*
+*-generated.*
+*.generated.*
+
+# Temporary Files
+temp/
+tmp/
+.ai_temp/
+ai_working/
+
+# Session Files
+session_*.md
+analysis_*.md
+report_*.md
+
+# Backup Files
+*.ai_backup
+*.transform_backup
+*_backup_*
+
+# Lock Files
+*.lock
+.ai_lock
+.transform_lock
+
+# Demo and Test Outputs
+demo_outputs/
+example_outputs/
+sample_outputs/
+
+# Performance Data
+benchmarks/
+performance/
+metrics/
+
+# LLM Outputs
+llm_outputs/
+ai_responses/
+claude_outputs/
+
+# Research Files
+rd_*.json
+rd_*.csv
+rd_*.md
+
+# Maven/Gradle Outputs (if generated)
+target/
+build/
+*.jar
+*.war
+*.class
+
+# Spring Boot Files (if generated)
+HELP.md
+*.original
+
+# IDE Files (if generated)
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Log Files
+*.log
+logs/
+
+# Database Files (if generated)
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.backup

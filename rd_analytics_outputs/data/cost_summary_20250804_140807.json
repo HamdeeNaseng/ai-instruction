@@ -1,0 +1,9 @@
+{
+  "total_api_calls": 0,
+  "total_input_tokens": 0,
+  "total_output_tokens": 0,
+  "total_tokens": 0,
+  "total_cost": 0.0,
+  "average_cost_per_call": 0,
+  "calls": []
+}

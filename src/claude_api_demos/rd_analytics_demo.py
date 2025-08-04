@@ -17,6 +17,10 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Union
 import anthropic
 from anthropic.types import TextBlock
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 
 def extract_text_from_content(content_blocks):
