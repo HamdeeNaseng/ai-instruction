@@ -648,7 +648,7 @@ class JavaTransformationEngine:
         Generate specific coding rules and conventions for transformation including:
         
         1. GENERAL CODING STANDARDS:
-           - Java 17+ feature usage rules
+           - Java 21+ feature usage rules
            - Modern construct replacement patterns
            - Variable declaration best practices
         
@@ -835,7 +835,7 @@ class JavaTransformationEngine:
         
         1. PROJECT OVERVIEW:
            - Project name and description
-           - Java 17+ and Spring Boot 3.x
+           - Java 21+ and Spring Boot 3.x
            - Build tool and dependency management
            - Database and testing framework
         
@@ -1160,12 +1160,12 @@ class JavaTransformationEngine:
         Generate a modern Spring Boot 3.x pom.xml file based on the legacy project analysis:
 
         LEGACY PROJECT INFO:
-        - Java Version: Upgrade from Java 8 to Java 17
+        - Java Version: Upgrade from Java 8 to Java 21
         - Dependencies found: {phase1_results.get('structure_analysis', {}).get('structure_info', {}).get('dependencies', [])}
         
         Create a comprehensive pom.xml with:
         1. Spring Boot 3.1+ parent
-        2. Java 17 configuration
+        2. Java 21 configuration
         3. Essential Spring Boot starters (web, data-jpa, security, actuator)
         4. Database driver (PostgreSQL)
         5. Testing dependencies (JUnit 5, TestContainers)
@@ -1683,12 +1683,12 @@ class JavaTransformationEngine:
             Generate a modern Spring Boot 3.x pom.xml file for educational purposes based on the legacy project analysis:
 
             LEGACY PROJECT INFO:
-            - Java Version: Upgrade from Java 8 to Java 17
+            - Java Version: Upgrade from Java 8 to Java 21
             - Dependencies found: {phase1_results.get('structure_analysis', {}).get('structure_info', {}).get('dependencies', [])}
             
             Create a comprehensive pom.xml with:
             1. Spring Boot 3.1+ parent
-            2. Java 17 configuration
+            2. Java 21 configuration
             3. Essential Spring Boot starters (web, data-jpa, security, actuator)
             4. Database driver (PostgreSQL)
             5. Testing dependencies (JUnit 5, TestContainers)
@@ -1755,7 +1755,7 @@ class JavaTransformationEngine:
             1. @SpringBootApplication annotation
             2. Standard main method with SpringApplication.run()
             3. Basic configuration if needed
-            4. Clean, modern Java 17+ code style
+            4. Clean, modern Java 21+ code style
             
             Generate only the Java code, no additional text.
             """

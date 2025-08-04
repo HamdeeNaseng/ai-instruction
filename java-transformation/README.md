@@ -15,7 +15,7 @@ This branch (`x-transform`) is dedicated to R&D analysis for migrating legacy Ja
 - Limited modern frameworks
 
 **To (Modern):**
-- Java 17+ with latest features
+- Java 21+ with latest features
 - Spring Boot 3.x ecosystem
 - Spring Data JPA with Hibernate
 - Lombok for boilerplate reduction
@@ -26,7 +26,7 @@ This branch (`x-transform`) is dedicated to R&D analysis for migrating legacy Ja
 
 | Component | Legacy | Modern |
 |-----------|--------|---------|
-| **Java Version** | Java 8 | Java 17+ |
+| **Java Version** | Java 8 | Java 21+ |
 | **Framework** | Plain Java/Servlets | Spring Boot 3.x |
 | **Data Access** | JDBC + DAO Pattern | Spring Data JPA |
 | **Dependency Injection** | Manual/Factory Pattern | Spring IoC Container |
@@ -192,7 +192,7 @@ The R&D analytics will perform:
 2. **Modify Requirements**
    ```python
    modern_requirements = {
-       "target_java_version": "Java 17",
+       "target_java_version": "Java 21",
        "framework": "Spring Boot 3.x",
        # ... adjust to your needs
    }

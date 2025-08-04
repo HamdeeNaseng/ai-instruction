@@ -212,7 +212,7 @@ This guideline provides a structured approach for AI agents to analyze, transfor
 
 ## General Coding Standards
 ### Java Version Features
-- Use Java 17+ features (records, pattern matching, text blocks)
+- Use Java 21+ features (records, pattern matching, text blocks)
 - Replace old constructs with modern equivalents
 - Use var for local variables where appropriate
 
@@ -665,7 +665,7 @@ static final ArchRule services_should_only_be_accessed_by_controllers =
 
 ## Project Overview
 - Project Name: [NAME]
-- Java Version: 17+
+- Java Version: 21+
 - Spring Boot Version: 3.x
 - Build Tool: Maven/Gradle
 - Database: PostgreSQL/MySQL
@@ -1128,7 +1128,7 @@ The AI must maintain state across multiple sessions for large projects:
   "project_info": {
     "name": "ProjectName",
     "java_version": "8",
-    "target_java_version": "17",
+    "target_java_version": "21",
     "framework": "Spring Boot 3.x",
     "database": "PostgreSQL",
     "estimated_size": "large"

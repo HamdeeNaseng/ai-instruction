@@ -109,7 +109,7 @@ class JavaMigrationRDAnalytics(RDAnalyticsAssistant):
             "project_info": {
                 "name": "Unknown",
                 "java_version": "8",
-                "target_java_version": "17",
+                "target_java_version": "21",
                 "framework": "Spring Boot 3.x",
                 "database": "PostgreSQL",
                 "estimated_size": "medium"
@@ -1141,7 +1141,7 @@ def demonstrate_java_migration_rd():
     
     # Modern requirements
     modern_requirements = {
-        "target_java_version": "Java 17",
+        "target_java_version": "Java 21",
         "framework": "Spring Boot 3.x",
         "data_layer": "Spring Data JPA with Hibernate",
         "build_tool": "Maven with Spring Boot plugin",

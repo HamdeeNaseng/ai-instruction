@@ -163,7 +163,7 @@ This legacy system demonstrates several areas that would benefit from modernizat
 
 ### 2. Modern Java Features
 - **Lombok** to reduce boilerplate code
-- **Java 17+** features (records, pattern matching, etc.)
+- **Java 21+** features (records, pattern matching, etc.)
 - **Stream API** for data processing
 - **Optional** for null safety
 
@@ -188,7 +188,7 @@ This legacy system demonstrates several areas that would benefit from modernizat
 
 For organizations looking to modernize similar legacy systems:
 
-1. **Phase 1:** Update to modern Java version (8 → 17+)
+1. **Phase 1:** Update to modern Java version (8 → 21+)
 2. **Phase 2:** Introduce Spring Boot framework
 3. **Phase 3:** Migrate to Spring Data JPA
 4. **Phase 4:** Add REST APIs and modern UI
