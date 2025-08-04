@@ -135,6 +135,16 @@ class RDAnalyticsAssistant:
         
         self.data_dir = self.output_dir / "data"
         self.data_dir.mkdir(exist_ok=True)
+        
+        # Create information directories for multilingual reports
+        self.info_dir = self.output_dir / "information"
+        self.info_dir.mkdir(exist_ok=True)
+        
+        self.info_en_dir = self.info_dir / "en"
+        self.info_en_dir.mkdir(exist_ok=True)
+        
+        self.info_th_dir = self.info_dir / "th"
+        self.info_th_dir.mkdir(exist_ok=True)
 
     def analyze_experimental_data(self, data: Union[str, Dict, List], 
                                 context: str = "", 
@@ -644,6 +654,198 @@ class RDAnalyticsAssistant:
             print(f"❌ {error_msg}")
             return {"error": error_msg, "timestamp": datetime.datetime.now().isoformat()}
 
+    def generate_multilingual_summary(self, session_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Generate summary reports in both English and Thai
+        """
+        print(f"\n🌐 Generating Multilingual Summary Reports")
+        print("=" * 60)
+        
+        # Prepare session data for the prompt
+        session_str = json.dumps(session_data, indent=2)
+        
+        # Generate English summary
+        english_prompt = f"""
+        As an expert R&D report writer, create a comprehensive executive summary report in ENGLISH:
+
+        SESSION DATA:
+        {session_str}
+        
+        Please create a professional executive summary with:
+        1. PROJECT OVERVIEW: Brief description of R&D activities performed
+        2. KEY FINDINGS: Most important discoveries and insights
+        3. COST ANALYSIS: Token usage and financial summary
+        4. PERFORMANCE METRICS: Success indicators and KPIs
+        5. RECOMMENDATIONS: Next steps and strategic recommendations
+        6. TECHNICAL SUMMARY: Brief technical highlights
+        7. RISK ASSESSMENT: Identified risks and mitigation strategies
+        8. CONCLUSION: Overall project status and outlook
+        
+        Format as a professional executive summary suitable for management review.
+        Use clear headings, bullet points, and executive-level language.
+        """
+        
+        # Generate Thai summary
+        thai_prompt = f"""
+        As an expert R&D report writer, create a comprehensive executive summary report in THAI language:
+
+        SESSION DATA:
+        {session_str}
+        
+        Please create a professional executive summary IN THAI with:
+        1. ภาพรวมโครงการ: คำอธิบายสั้นๆ เกี่ยวกับกิจกรรม R&D ที่ดำเนินการ
+        2. ผลการค้นพบที่สำคัญ: การค้นพบและข้อมูลเชิงลึกที่สำคัญที่สุด
+        3. การวิเคราะห์ต้นทุน: การใช้โทเค็นและสรุปทางการเงิน
+        4. ตัวชี้วัดประสิทธิภาพ: ตัวบ่งชี้ความสำเร็จและ KPI
+        5. ข้อเสนอแนะ: ขั้นตอนต่อไปและข้อเสนอแนะเชิงกลยุทธ์
+        6. สรุปทางเทคนิค: จุดเด่นทางเทคนิคโดยย่อ
+        7. การประเมินความเสี่ยง: ความเสี่ยงที่ระบุและกลยุทธ์การลดความเสี่ยง
+        8. บทสรุป: สถานะโครงการโดยรวมและแนวโน้ม
+        
+        จัดรูปแบบเป็นสรุปผู้บริหารระดับมืออาชีพที่เหมาะสำหรับการทบทวนของผู้บริหาร
+        ใช้หัวข้อที่ชัดเจน จุดย่อย และภาษาระดับผู้บริหาร
+        """
+        
+        summaries = {}
+        
+        try:
+            # Generate English summary
+            print("📝 Generating English summary...")
+            en_response = self.client.messages.create(
+                model=self.model,
+                max_tokens=4000,
+                messages=[{"role": "user", "content": english_prompt}]
+            )
+            
+            # Track cost for English summary
+            en_input_tokens = en_response.usage.input_tokens
+            en_output_tokens = en_response.usage.output_tokens
+            en_cost = self.cost_tracker.track_usage(
+                model=self.model, 
+                input_tokens=en_input_tokens, 
+                output_tokens=en_output_tokens,
+                operation="multilingual_summary_english"
+            )
+            
+            summaries['english'] = {
+                "content": extract_text_from_content(en_response.content),
+                "cost_info": {
+                    "input_tokens": en_input_tokens,
+                    "output_tokens": en_output_tokens,
+                    "cost": round(en_cost, 6)
+                }
+            }
+            
+            # Generate Thai summary
+            print("📝 Generating Thai summary...")
+            th_response = self.client.messages.create(
+                model=self.model,
+                max_tokens=4000,
+                messages=[{"role": "user", "content": thai_prompt}]
+            )
+            
+            # Track cost for Thai summary
+            th_input_tokens = th_response.usage.input_tokens
+            th_output_tokens = th_response.usage.output_tokens
+            th_cost = self.cost_tracker.track_usage(
+                model=self.model, 
+                input_tokens=th_input_tokens, 
+                output_tokens=th_output_tokens,
+                operation="multilingual_summary_thai"
+            )
+            
+            summaries['thai'] = {
+                "content": extract_text_from_content(th_response.content),
+                "cost_info": {
+                    "input_tokens": th_input_tokens,
+                    "output_tokens": th_output_tokens,
+                    "cost": round(th_cost, 6)
+                }
+            }
+            
+            # Save both summaries
+            self._save_multilingual_summaries(summaries)
+            
+            # Print cost summary
+            total_cost = en_cost + th_cost
+            total_tokens = en_input_tokens + en_output_tokens + th_input_tokens + th_output_tokens
+            print(f"💰 Multilingual Summary Cost:")
+            print(f"   English: ${en_cost:.6f} ({en_input_tokens + en_output_tokens:,} tokens)")
+            print(f"   Thai: ${th_cost:.6f} ({th_input_tokens + th_output_tokens:,} tokens)")
+            print(f"   Total: ${total_cost:.6f} ({total_tokens:,} tokens)")
+            
+            result = {
+                "timestamp": datetime.datetime.now().isoformat(),
+                "session_id": self.session_id,
+                "summaries": summaries,
+                "total_cost": round(total_cost, 6),
+                "total_tokens": total_tokens
+            }
+            
+            self._log_result("multilingual_summary", result)
+            
+            print("✅ Multilingual summaries generated successfully!")
+            print(f"   📁 English: information/en/summary_{self.session_id}.md")
+            print(f"   📁 Thai: information/th/summary_{self.session_id}.md")
+            
+            return result
+            
+        except Exception as e:
+            error_msg = f"Error generating multilingual summary: {e}"
+            print(f"❌ {error_msg}")
+            return {"error": error_msg, "timestamp": datetime.datetime.now().isoformat()}
+
+    def _save_multilingual_summaries(self, summaries: Dict[str, Any]):
+        """Save multilingual summary reports to appropriate directories"""
+        
+        # Save English summary
+        en_filename = f"summary_{self.session_id}.md"
+        en_filepath = self.info_en_dir / en_filename
+        
+        en_content = f"""# R&D Analytics Executive Summary
+        
+**Session ID:** {self.session_id}  
+**Generated:** {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}  
+**Language:** English  
+**Cost:** ${summaries['english']['cost_info']['cost']:.6f}  
+**Tokens:** {summaries['english']['cost_info']['input_tokens'] + summaries['english']['cost_info']['output_tokens']:,}
+
+---
+
+{summaries['english']['content']}
+
+---
+
+*This report was generated using Claude AI for R&D Analytics*
+"""
+        
+        with open(en_filepath, 'w', encoding='utf-8') as f:
+            f.write(en_content)
+        
+        # Save Thai summary
+        th_filename = f"summary_{self.session_id}.md"
+        th_filepath = self.info_th_dir / th_filename
+        
+        th_content = f"""# สรุปผู้บริหาร - การวิเคราะห์ R&D
+        
+**รหัสเซสชัน:** {self.session_id}  
+**สร้างเมื่อ:** {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}  
+**ภาษา:** ไทย  
+**ต้นทุน:** ${summaries['thai']['cost_info']['cost']:.6f}  
+**โทเค็น:** {summaries['thai']['cost_info']['input_tokens'] + summaries['thai']['cost_info']['output_tokens']:,}
+
+---
+
+{summaries['thai']['content']}
+
+---
+
+*รายงานนี้สร้างโดยใช้ Claude AI สำหรับการวิเคราะห์ R&D*
+"""
+        
+        with open(th_filepath, 'w', encoding='utf-8') as f:
+            f.write(th_content)
+
     def _log_result(self, operation_type: str, result: Dict[str, Any]):
         """Log operation results to session log"""
         log_entry = {
@@ -801,7 +1003,7 @@ class RDAnalyticsAssistant:
             summary['operation_types'][op_type] = summary['operation_types'].get(op_type, 0) + 1
         
         # List created files
-        for dir_path in [self.logs_dir, self.reports_dir, self.data_dir]:
+        for dir_path in [self.logs_dir, self.reports_dir, self.data_dir, self.info_en_dir, self.info_th_dir]:
             for file_path in dir_path.glob(f"*{self.session_id}*"):
                 summary['files_created'].append(str(file_path.relative_to(self.output_dir)))
         
@@ -952,6 +1154,10 @@ def demonstrate_rd_analytics():
     print("\n7️⃣ SESSION SUMMARY")
     session_summary = rd.get_session_summary()
     
+    # Generate multilingual summary
+    print("\n8️⃣ MULTILINGUAL SUMMARY GENERATION")
+    multilingual_summary = rd.generate_multilingual_summary(session_summary)
+    
     print(f"\n🎉 R&D Analytics Demo Complete!")
     print(f"📁 All outputs saved to: {rd.output_dir}")
     print(f"📊 Session ID: {rd.session_id}")
@@ -979,12 +1185,16 @@ def main():
         print("  ✅ Project metrics tracking and analysis")
         print("  ✅ Technical report generation")
         print("  ✅ Comprehensive logging and documentation")
+        print("  ✅ Multilingual summary reports (English/Thai)")
+        print("  ✅ Cost tracking and token usage analysis")
         print("\n💡 Use these tools for:")
         print("  - Data-driven R&D decisions")
         print("  - Experimental planning and optimization")
         print("  - Project progress monitoring")
         print("  - Technical documentation")
         print("  - Risk assessment and mitigation")
+        print("  - Multilingual reporting for international teams")
+        print("  - AI cost management and budgeting")
         
     except Exception as e:
         print(f"❌ Error running R&D Analytics demo: {e}")

@@ -1,7 +1,0 @@
-Metric,Value,Target,Timestamp
-completion_percentage,75,80,2025-08-04T11:56:09.276048
-budget_used,850000,900000,2025-08-04T11:56:09.276048
-milestones_achieved,8,10,2025-08-04T11:56:09.276048
-quality_score,8.7,9.0,2025-08-04T11:56:09.276048
-team_utilization,92,90,2025-08-04T11:56:09.276048
-risk_score,3.2,3.0,2025-08-04T11:56:09.276048
