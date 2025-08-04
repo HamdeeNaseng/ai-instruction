@@ -1,7 +1,23 @@
 import anthropic
 import os
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Sequence, cast
 import json
+from anthropic.types import TextBlock
+
+def extract_text_from_content(content_block) -> str:
+    """
+    Safely extract text from different types of content blocks
+    
+    Args:
+        content_block: The content block from Claude API response
+        
+    Returns:
+        The text content as a string
+    """
+    if isinstance(content_block, TextBlock):
+        return content_block.text
+    else:
+        return str(content_block)
 
 class ClaudeClient:
     def __init__(self, api_key: Optional[str] = None):
@@ -34,11 +50,11 @@ class ClaudeClient:
                     {"role": "user", "content": message}
                 ]
             )
-            return message_obj.content[0].text
+            return extract_text_from_content(message_obj.content[0])
         except Exception as e:
             return f"Error: {e}"
     
-    def multi_turn_conversation(self, messages: List[Dict[str, str]], model: str = "claude-3-5-sonnet-20241022") -> str:
+    def multi_turn_conversation(self, messages: List[Dict[str, Any]], model: str = "claude-3-5-sonnet-20241022") -> str:
         """
         Have a multi-turn conversation with Claude
         
@@ -53,9 +69,9 @@ class ClaudeClient:
             message_obj = self.client.messages.create(
                 model=model,
                 max_tokens=1000,
-                messages=messages
+                messages=cast(Any, messages)
             )
-            return message_obj.content[0].text
+            return extract_text_from_content(message_obj.content[0])
         except Exception as e:
             return f"Error: {e}"
     

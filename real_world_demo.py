@@ -9,6 +9,21 @@ import json
 from typing import Dict, List, Optional
 from datetime import datetime
 
+def extract_text_from_content(content_block) -> str:
+    """
+    Safely extract text from different types of content blocks
+    
+    Args:
+        content_block: The content block from Claude API response
+        
+    Returns:
+        The text content as a string
+    """
+    if hasattr(content_block, 'text'):
+        return content_block.text
+    else:
+        return str(content_block)
+
 class RealWorldClaudeDemo:
     """Demonstrate real-world applications of Claude API"""
     
@@ -47,7 +62,8 @@ class RealWorldClaudeDemo:
                 max_tokens=2000,
                 messages=[{"role": "user", "content": prompt}]
             )
-            return response.content[0].text
+            # Handle different content block types
+            return extract_text_from_content(response.content[0])
         except Exception as e:
             return f"Error generating documentation: {e}"
     
@@ -79,7 +95,7 @@ class RealWorldClaudeDemo:
                 max_tokens=3000,
                 messages=[{"role": "user", "content": prompt}]
             )
-            return response.content[0].text
+            return extract_text_from_content(response.content[0])
         except Exception as e:
             return f"Error building API client: {e}"
     
@@ -136,8 +152,8 @@ class RealWorldClaudeDemo:
             )
             
             return {
-                "analysis": analysis_response.content[0].text,
-                "fix": fix_response.content[0].text
+                "analysis": extract_text_from_content(analysis_response.content[0]),
+                "fix": extract_text_from_content(fix_response.content[0])
             }
         except Exception as e:
             return {"error": f"Error in bug analysis: {e}"}
@@ -169,7 +185,7 @@ class RealWorldClaudeDemo:
                 max_tokens=2000,
                 messages=[{"role": "user", "content": prompt}]
             )
-            return response.content[0].text
+            return extract_text_from_content(response.content[0])
         except Exception as e:
             return f"Error in architecture review: {e}"
 

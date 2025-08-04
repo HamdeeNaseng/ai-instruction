@@ -4,7 +4,7 @@ Test suite for Claude API Demonstrations package
 
 import pytest
 import os
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
 
 def test_package_imports():
     """Test that all main classes can be imported"""

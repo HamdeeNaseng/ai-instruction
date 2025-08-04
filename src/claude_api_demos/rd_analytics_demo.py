@@ -16,6 +16,18 @@ import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Union
 import anthropic
+from anthropic.types import TextBlock
+
+
+def extract_text_from_content(content_blocks):
+    """
+    Extract text content from Claude API response content blocks.
+    Only TextBlock objects have a .text attribute.
+    """
+    for content_block in content_blocks:
+        if isinstance(content_block, TextBlock):
+            return content_block.text
+    return "No text content found in response"
 
 
 class RDAnalyticsAssistant:
@@ -95,7 +107,7 @@ class RDAnalyticsAssistant:
                 "analysis_type": analysis_type,
                 "context": context,
                 "raw_data": data_str[:500] + "..." if len(data_str) > 500 else data_str,
-                "analysis": response.content[0].text,
+                "analysis": extract_text_from_content(response.content),
                 "session_id": self.session_id
             }
             
@@ -104,7 +116,7 @@ class RDAnalyticsAssistant:
             
             print("📊 Analysis Results:")
             print("-" * 40)
-            print(response.content[0].text)
+            print(extract_text_from_content(response.content))
             
             # Save detailed report
             self._save_analysis_report(analysis_result)
@@ -160,7 +172,7 @@ class RDAnalyticsAssistant:
                 "hypothesis": hypothesis,
                 "success_criteria": success_criteria,
                 "results_summary": results_str[:500] + "..." if len(results_str) > 500 else results_str,
-                "interpretation": response.content[0].text,
+                "interpretation": extract_text_from_content(response.content),
                 "session_id": self.session_id
             }
             
@@ -169,7 +181,7 @@ class RDAnalyticsAssistant:
             
             print("🔍 Results Interpretation:")
             print("-" * 40)
-            print(response.content[0].text)
+            print(extract_text_from_content(response.content))
             
             return interpretation
             
@@ -223,7 +235,7 @@ class RDAnalyticsAssistant:
                 "context": context,
                 "options": options,
                 "criteria": criteria,
-                "analysis": response.content[0].text,
+                "analysis": extract_text_from_content(response.content),
                 "session_id": self.session_id
             }
             
@@ -232,7 +244,7 @@ class RDAnalyticsAssistant:
             
             print("📋 Decision Matrix Analysis:")
             print("-" * 40)
-            print(response.content[0].text)
+            print(extract_text_from_content(response.content))
             
             # Save as structured report
             self._save_decision_report(decision_matrix)
@@ -293,7 +305,7 @@ class RDAnalyticsAssistant:
                 "variables": variables,
                 "constraints": constraints,
                 "budget": budget,
-                "design": response.content[0].text,
+                "design": extract_text_from_content(response.content),
                 "session_id": self.session_id
             }
             
@@ -302,7 +314,7 @@ class RDAnalyticsAssistant:
             
             print("🔬 Experimental Design:")
             print("-" * 40)
-            print(response.content[0].text)
+            print(extract_text_from_content(response.content))
             
             return experiment_design
             
@@ -357,7 +369,7 @@ class RDAnalyticsAssistant:
                 "audience": audience,
                 "report_type": report_type,
                 "data_summary": data_str[:500] + "..." if len(data_str) > 500 else data_str,
-                "report_content": response.content[0].text,
+                "report_content": extract_text_from_content(response.content),
                 "session_id": self.session_id
             }
             
@@ -367,7 +379,8 @@ class RDAnalyticsAssistant:
             
             print("📋 Technical Report Generated:")
             print("-" * 40)
-            print(response.content[0].text[:1000] + "..." if len(response.content[0].text) > 1000 else response.content[0].text)
+            report_text = extract_text_from_content(response.content)
+            print(report_text[:1000] + "..." if len(report_text) > 1000 else report_text)
             print(f"\n💾 Full report saved to: {self.reports_dir}/technical_report_{self.session_id}.md")
             
             return report
@@ -378,7 +391,7 @@ class RDAnalyticsAssistant:
             return {"error": error_msg, "timestamp": datetime.datetime.now().isoformat()}
 
     def track_project_metrics(self, metrics: Dict[str, Any], 
-                            targets: Dict[str, Any] = None) -> Dict[str, Any]:
+                            targets: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Track and analyze project metrics against targets
         """
@@ -421,7 +434,7 @@ class RDAnalyticsAssistant:
                 "timestamp": datetime.datetime.now().isoformat(),
                 "metrics": metrics,
                 "targets": targets,
-                "analysis": response.content[0].text,
+                "analysis": extract_text_from_content(response.content),
                 "session_id": self.session_id
             }
             
@@ -430,7 +443,7 @@ class RDAnalyticsAssistant:
             
             print("📊 Metrics Analysis:")
             print("-" * 40)
-            print(response.content[0].text)
+            print(extract_text_from_content(response.content))
             
             # Save metrics data
             self._save_metrics_data(metrics_analysis)

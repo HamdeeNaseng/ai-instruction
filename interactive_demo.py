@@ -8,6 +8,22 @@ import os
 from typing import Optional, List, Dict
 import sys
 import traceback
+from anthropic.types import TextBlock
+
+def extract_text_from_content(content_block) -> str:
+    """
+    Safely extract text from different types of content blocks
+    
+    Args:
+        content_block: The content block from Claude API response
+        
+    Returns:
+        The text content as a string
+    """
+    if isinstance(content_block, TextBlock):
+        return content_block.text
+    else:
+        return str(content_block)
 
 class ClaudeDeveloperAssistant:
     def __init__(self, api_key: Optional[str] = None):
@@ -219,7 +235,7 @@ class ClaudeDeveloperAssistant:
                 messages=self.conversation_history
             )
             
-            assistant_response = response.content[0].text
+            assistant_response = extract_text_from_content(response.content[0])
             self.conversation_history.append({"role": "assistant", "content": assistant_response})
             
             return assistant_response

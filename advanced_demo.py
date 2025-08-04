@@ -8,6 +8,22 @@ import os
 import json
 from typing import List, Dict, Any, Optional
 from pathlib import Path
+from anthropic.types import TextBlock
+
+def extract_text_from_content(content_block) -> str:
+    """
+    Safely extract text from different types of content blocks
+    
+    Args:
+        content_block: The content block from Claude API response
+        
+    Returns:
+        The text content as a string
+    """
+    if isinstance(content_block, TextBlock):
+        return content_block.text
+    else:
+        return str(content_block)
 
 class AdvancedClaudeDemo:
     def __init__(self, api_key: Optional[str] = None):
@@ -47,7 +63,7 @@ class AdvancedClaudeDemo:
                     messages=[{"role": "user", "content": full_prompt}]
                 )
                 
-                results[task_name] = response.content[0].text
+                results[task_name] = extract_text_from_content(response.content[0])
                 print(f"✅ {task_name.title()} completed")
             
             return results
@@ -74,7 +90,7 @@ class AdvancedClaudeDemo:
                 max_tokens=1500,
                 messages=[{"role": "user", "content": prompt}]
             )
-            return response.content[0].text
+            return extract_text_from_content(response.content[0])
         except Exception as e:
             return f"Error generating tests: {e}"
     
@@ -99,7 +115,7 @@ class AdvancedClaudeDemo:
                 max_tokens=1500,
                 messages=[{"role": "user", "content": prompt}]
             )
-            return response.content[0].text
+            return extract_text_from_content(response.content[0])
         except Exception as e:
             return f"Error explaining code: {e}"
     
@@ -125,7 +141,7 @@ class AdvancedClaudeDemo:
                 max_tokens=2000,
                 messages=[{"role": "user", "content": prompt}]
             )
-            return response.content[0].text
+            return extract_text_from_content(response.content[0])
         except Exception as e:
             return f"Error optimizing code: {e}"
 
