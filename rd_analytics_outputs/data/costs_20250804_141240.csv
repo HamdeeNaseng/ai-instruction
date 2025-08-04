@@ -1,4 +1,0 @@
-Timestamp,Operation,Model,Input_Tokens,Output_Tokens,Input_Cost,Output_Cost,Total_Cost
-2025-08-04T14:12:59.496808,legacy_codebase_analysis,claude-3-5-sonnet-20241022,538,1166,0.001614,0.01749,0.019104
-2025-08-04T14:13:21.629812,modern_architecture_design,claude-3-5-sonnet-20241022,2207,1724,0.006621,0.02586,0.032481
-2025-08-04T14:13:44.391735,migration_plan_generation,claude-3-5-sonnet-20241022,6253,1412,0.018759,0.02118,0.039939

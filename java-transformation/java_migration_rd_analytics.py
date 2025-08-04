@@ -26,7 +26,7 @@ src_path = parent_dir / "src"
 sys.path.insert(0, str(src_path))
 
 try:
-    from claude_api_demos.rd_analytics_demo import RDAnalyticsAssistant, extract_text_from_content
+    from rd_analytics_demo import RDAnalyticsAssistant, extract_text_from_content
 except ImportError:
     print("❌ Error: Could not import RDAnalyticsAssistant. Please run from the project root directory.")
     print("   Make sure you have set up the environment correctly.")
@@ -59,7 +59,7 @@ class JavaMigrationRDAnalytics(RDAnalyticsAssistant):
         
         # Reinitialize cost tracker with new output directory
         # Import the CostTracker class here to avoid circular imports
-        from claude_api_demos.rd_analytics_demo import CostTracker
+        from rd_analytics_demo import CostTracker
         self.cost_tracker = CostTracker()
         
         # Create Java-specific directories

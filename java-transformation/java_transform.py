@@ -37,7 +37,7 @@ sys.path.insert(0, str(src_path))
 sys.path.insert(0, str(parent_dir))
 
 try:
-    from claude_api_demos.rd_analytics_demo import RDAnalyticsAssistant, extract_text_from_content, CostTracker
+    from rd_analytics_demo import RDAnalyticsAssistant, extract_text_from_content, CostTracker
     from java_migration_rd_analytics import JavaMigrationRDAnalytics
 except ImportError as e:
     print(f"❌ Error: Could not import required modules: {e}")
