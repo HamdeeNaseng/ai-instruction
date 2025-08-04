@@ -1,10 +1,11 @@
-# Claude API Example Project
+# AI-Instruction - Claude API Example Project
 
 This project demonstrates how to use the Anthropic Claude API.
 
 ## Setup
 
 1. Install the required packages:
+
    ```bash
    pip install anthropic python-dotenv
    ```
@@ -12,13 +13,15 @@ This project demonstrates how to use the Anthropic Claude API.
 2. Set up your API key:
    - Get your API key from [Anthropic Console](https://console.anthropic.com/)
    - Create a `.env` file in this directory:
-     ```
+
+     ```env
      ANTHROPIC_API_KEY=your_api_key_here
      ```
 
 ## Usage
 
 Run the example script:
+
 ```bash
 python claude_example.py
 ```
