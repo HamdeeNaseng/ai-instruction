@@ -1,0 +1,119 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Basic Demo",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/claude_api_demos/basic_demo.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true
+    },
+    {
+      "name": "Run Advanced Demo",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/claude_api_demos/advanced_demo.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true
+    },
+    {
+      "name": "Run Interactive Demo",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/claude_api_demos/interactive_demo.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true,
+      "args": ["interactive"]
+    },
+    {
+      "name": "Run Real World Demo",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/claude_api_demos/real_world_demo.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true
+    },
+    {
+      "name": "Run Demo Suite (Menu)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/run_demos.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true
+    },
+    {
+      "name": "Run All Demos via Suite",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/run_demos.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true,
+      "args": ["all"]
+    },
+    {
+      "name": "Run CLI - Interactive Menu",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/claude_api_demos/cli.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true
+    },
+    {
+      "name": "Run CLI - Basic Demo",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/claude_api_demos/cli.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true,
+      "args": ["basic"]
+    },
+    {
+      "name": "Run Tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests/", "-v"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": false
+    },
+    {
+      "name": "Verify Installation",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/verify_installation.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true
+    },
+    {
+      "name": "Debug Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true
+    }
+  ]
+}

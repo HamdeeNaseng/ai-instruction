@@ -1,0 +1,7 @@
+include README.md
+include LICENSE
+include .env.example
+include requirements.txt
+recursive-include src/claude_api_demos *.py
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
