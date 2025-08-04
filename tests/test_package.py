@@ -69,6 +69,24 @@ def test_real_world_demo_initialization():
         assert demo is not None
         mock_anthropic.assert_called_once()
 
+def test_rd_analytics_demo_initialization():
+    """Test that RDAnalyticsAssistant can be imported and initialized"""
+    from claude_api_demos import RDAnalyticsAssistant
+    
+    # Test import
+    assert RDAnalyticsAssistant is not None
+    
+    # Mock the Anthropic client to avoid needing API key
+    with patch('anthropic.Anthropic') as mock_anthropic:
+        mock_client = MagicMock()
+        mock_anthropic.return_value = mock_client
+        
+        # Test initialization
+        rd_assistant = RDAnalyticsAssistant()
+        assert rd_assistant is not None
+        assert rd_assistant.model == "claude-3-5-sonnet-20241022"
+        assert rd_assistant.results_log == []
+
 def test_cli_module_exists():
     """Test that CLI module exists and can be imported"""
     try:

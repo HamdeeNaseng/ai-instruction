@@ -43,6 +43,16 @@
       "justMyCode": true
     },
     {
+      "name": "Run R&D Analytics Demo",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/claude_api_demos/rd_analytics_demo.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "justMyCode": true
+    },
+    {
       "name": "Run Demo Suite (Menu)",
       "type": "debugpy",
       "request": "launch",

@@ -124,6 +124,22 @@
       "problemMatcher": []
     },
     {
+      "label": "Run R&D Analytics Demo",
+      "type": "shell",
+      "command": "python",
+      "args": ["src/claude_api_demos/rd_analytics_demo.py"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "Run Demo Suite (Menu)",
       "type": "shell",
       "command": "python",

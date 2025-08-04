@@ -81,6 +81,17 @@ def run_realworld_demo():
     except Exception as e:
         print(f"❌ Error running real-world demo: {e}")
 
+def run_rd_analytics_demo():
+    """Run R&D Analytics demonstrations"""
+    print("\n🔬 Running R&D Analytics Demo...")
+    print("="*60)
+    
+    try:
+        from claude_api_demos.rd_analytics_demo import main
+        main()
+    except Exception as e:
+        print(f"❌ Error running R&D analytics demo: {e}")
+
 def show_menu():
     """Show main menu"""
     print("\n🤖 Claude API Demonstration Suite")
@@ -91,8 +102,9 @@ def show_menu():
     print("2. 🔧 Advanced Demo - Code analysis and refactoring")
     print("3. 💬 Interactive Demo - Chat-based development assistant")
     print("4. 🌟 Real-World Demo - Practical applications")
-    print("5. 🎯 Run All Demos - Complete demonstration suite")
-    print("6. ❓ Show Help - More information")
+    print("5. 🔬 R&D Analytics Demo - Data analysis & decision support")
+    print("6. 🎯 Run All Demos - Complete demonstration suite")
+    print("7. ❓ Show Help - More information")
     print("0. 👋 Exit")
     print()
 
@@ -159,14 +171,17 @@ def main():
             run_interactive_demo()
         elif demo_type == "realworld":
             run_realworld_demo()
+        elif demo_type == "rdanalytics" or demo_type == "rd":
+            run_rd_analytics_demo()
         elif demo_type == "all":
             run_basic_demo()
             run_advanced_demo()
             run_interactive_demo()
             run_realworld_demo()
+            run_rd_analytics_demo()
         else:
             print(f"❌ Unknown demo type: {demo_type}")
-            print("Available options: basic, advanced, interactive, realworld, all")
+            print("Available options: basic, advanced, interactive, realworld, rdanalytics, all")
         return
     
     # Interactive menu
@@ -174,7 +189,7 @@ def main():
         show_menu()
         
         try:
-            choice = input("Enter your choice (0-6): ").strip()
+            choice = input("Enter your choice (0-7): ").strip()
             
             if choice == "0":
                 print("\n👋 Thank you for using Claude API demos!")
@@ -188,16 +203,19 @@ def main():
             elif choice == "4":
                 run_realworld_demo()
             elif choice == "5":
+                run_rd_analytics_demo()
+            elif choice == "6":
                 print("\n🎯 Running all demonstrations...")
                 run_basic_demo()
                 run_advanced_demo()
                 run_interactive_demo()
                 run_realworld_demo()
+                run_rd_analytics_demo()
                 print("\n🎉 All demonstrations completed!")
-            elif choice == "6":
+            elif choice == "7":
                 show_help()
             else:
-                print("❌ Invalid choice. Please enter a number between 0-6.")
+                print("❌ Invalid choice. Please enter a number between 0-7.")
                 
         except KeyboardInterrupt:
             print("\n\n👋 Demo interrupted. Goodbye!")
