@@ -239,7 +239,8 @@ logs/
 demo_outputs/
 test_files/
 scratch/
-rd_analytics_outputs/
+
+!rd_analytics_outputs/logs/
 
 GIT_DUAL_SETUP.md
 git-dual-repo.sh
