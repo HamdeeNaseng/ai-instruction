@@ -30,6 +30,86 @@ def extract_text_from_content(content_blocks):
     return "No text content found in response"
 
 
+class CostTracker:
+    """
+    Track and calculate costs for Claude API usage
+    Pricing as of Claude 3.5 Sonnet (20241022) - Update as needed
+    """
+    
+    # Pricing per 1M tokens (as of latest pricing)
+    PRICING = {
+        "claude-3-5-sonnet-20241022": {
+            "input": 3.00,   # $3.00 per 1M input tokens
+            "output": 15.00  # $15.00 per 1M output tokens
+        },
+        "claude-3-5-haiku-20241022": {
+            "input": 0.25,   # $0.25 per 1M input tokens
+            "output": 1.25   # $1.25 per 1M output tokens
+        },
+        "claude-3-opus-20240229": {
+            "input": 15.00,  # $15.00 per 1M input tokens
+            "output": 75.00  # $75.00 per 1M output tokens
+        }
+    }
+    
+    def __init__(self):
+        self.total_input_tokens = 0
+        self.total_output_tokens = 0
+        self.total_cost = 0.0
+        self.api_calls = []
+    
+    def track_usage(self, model: str, input_tokens: int, output_tokens: int, operation: str = "unknown"):
+        """Track token usage and calculate cost for an API call"""
+        if model not in self.PRICING:
+            print(f"⚠️ Warning: Pricing not available for model {model}")
+            return 0.0
+        
+        pricing = self.PRICING[model]
+        input_cost = (input_tokens / 1_000_000) * pricing["input"]
+        output_cost = (output_tokens / 1_000_000) * pricing["output"]
+        call_cost = input_cost + output_cost
+        
+        # Track totals
+        self.total_input_tokens += input_tokens
+        self.total_output_tokens += output_tokens
+        self.total_cost += call_cost
+        
+        # Record individual call
+        call_record = {
+            "timestamp": datetime.datetime.now().isoformat(),
+            "operation": operation,
+            "model": model,
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+            "input_cost": round(input_cost, 6),
+            "output_cost": round(output_cost, 6),
+            "total_cost": round(call_cost, 6)
+        }
+        self.api_calls.append(call_record)
+        
+        return call_cost
+    
+    def get_summary(self) -> Dict[str, Any]:
+        """Get cost summary"""
+        return {
+            "total_api_calls": len(self.api_calls),
+            "total_input_tokens": self.total_input_tokens,
+            "total_output_tokens": self.total_output_tokens,
+            "total_tokens": self.total_input_tokens + self.total_output_tokens,
+            "total_cost": round(self.total_cost, 6),
+            "average_cost_per_call": round(self.total_cost / len(self.api_calls), 6) if self.api_calls else 0,
+            "calls": self.api_calls
+        }
+    
+    def print_call_summary(self, operation: str, cost: float, input_tokens: int, output_tokens: int):
+        """Print a formatted summary of the API call cost"""
+        print(f"💰 Cost Summary for {operation}:")
+        print(f"   Input tokens: {input_tokens:,} (${(input_tokens/1_000_000)*3.00:.6f})")
+        print(f"   Output tokens: {output_tokens:,} (${(output_tokens/1_000_000)*15.00:.6f})")
+        print(f"   Total cost: ${cost:.6f}")
+        print(f"   Running total: ${self.total_cost:.6f}")
+
+
 class RDAnalyticsAssistant:
     """
     R&D Analytics Assistant powered by Claude API
@@ -41,6 +121,7 @@ class RDAnalyticsAssistant:
         self.model = "claude-3-5-sonnet-20241022"
         self.results_log = []
         self.session_id = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.cost_tracker = CostTracker()  # Add cost tracking
         
         # Create directories for outputs
         self.output_dir = Path("rd_analytics_outputs")
@@ -102,13 +183,28 @@ class RDAnalyticsAssistant:
                 messages=[{"role": "user", "content": prompt}]
             )
             
+            # Track cost and usage
+            input_tokens = response.usage.input_tokens
+            output_tokens = response.usage.output_tokens
+            cost = self.cost_tracker.track_usage(
+                model=self.model, 
+                input_tokens=input_tokens, 
+                output_tokens=output_tokens,
+                operation="experimental_data_analysis"
+            )
+            
             analysis_result = {
                 "timestamp": datetime.datetime.now().isoformat(),
                 "analysis_type": analysis_type,
                 "context": context,
                 "raw_data": data_str[:500] + "..." if len(data_str) > 500 else data_str,
                 "analysis": extract_text_from_content(response.content),
-                "session_id": self.session_id
+                "session_id": self.session_id,
+                "cost_info": {
+                    "input_tokens": input_tokens,
+                    "output_tokens": output_tokens,
+                    "cost": round(cost, 6)
+                }
             }
             
             # Log the analysis
@@ -117,6 +213,9 @@ class RDAnalyticsAssistant:
             print("📊 Analysis Results:")
             print("-" * 40)
             print(extract_text_from_content(response.content))
+            
+            # Print cost summary
+            self.cost_tracker.print_call_summary("Data Analysis", cost, input_tokens, output_tokens)
             
             # Save detailed report
             self._save_analysis_report(analysis_result)
@@ -167,13 +266,28 @@ class RDAnalyticsAssistant:
                 messages=[{"role": "user", "content": prompt}]
             )
             
+            # Track cost and usage
+            input_tokens = response.usage.input_tokens
+            output_tokens = response.usage.output_tokens
+            cost = self.cost_tracker.track_usage(
+                model=self.model, 
+                input_tokens=input_tokens, 
+                output_tokens=output_tokens,
+                operation="results_interpretation"
+            )
+            
             interpretation = {
                 "timestamp": datetime.datetime.now().isoformat(),
                 "hypothesis": hypothesis,
                 "success_criteria": success_criteria,
                 "results_summary": results_str[:500] + "..." if len(results_str) > 500 else results_str,
                 "interpretation": extract_text_from_content(response.content),
-                "session_id": self.session_id
+                "session_id": self.session_id,
+                "cost_info": {
+                    "input_tokens": input_tokens,
+                    "output_tokens": output_tokens,
+                    "cost": round(cost, 6)
+                }
             }
             
             # Log the interpretation
@@ -182,6 +296,9 @@ class RDAnalyticsAssistant:
             print("🔍 Results Interpretation:")
             print("-" * 40)
             print(extract_text_from_content(response.content))
+            
+            # Print cost summary
+            self.cost_tracker.print_call_summary("Results Interpretation", cost, input_tokens, output_tokens)
             
             return interpretation
             
@@ -230,13 +347,28 @@ class RDAnalyticsAssistant:
                 messages=[{"role": "user", "content": prompt}]
             )
             
+            # Track cost and usage
+            input_tokens = response.usage.input_tokens
+            output_tokens = response.usage.output_tokens
+            cost = self.cost_tracker.track_usage(
+                model=self.model, 
+                input_tokens=input_tokens, 
+                output_tokens=output_tokens,
+                operation="decision_matrix_generation"
+            )
+            
             decision_matrix = {
                 "timestamp": datetime.datetime.now().isoformat(),
                 "context": context,
                 "options": options,
                 "criteria": criteria,
                 "analysis": extract_text_from_content(response.content),
-                "session_id": self.session_id
+                "session_id": self.session_id,
+                "cost_info": {
+                    "input_tokens": input_tokens,
+                    "output_tokens": output_tokens,
+                    "cost": round(cost, 6)
+                }
             }
             
             # Log the decision matrix
@@ -245,6 +377,9 @@ class RDAnalyticsAssistant:
             print("📋 Decision Matrix Analysis:")
             print("-" * 40)
             print(extract_text_from_content(response.content))
+            
+            # Print cost summary
+            self.cost_tracker.print_call_summary("Decision Matrix", cost, input_tokens, output_tokens)
             
             # Save as structured report
             self._save_decision_report(decision_matrix)
@@ -299,6 +434,16 @@ class RDAnalyticsAssistant:
                 messages=[{"role": "user", "content": prompt}]
             )
             
+            # Track cost and usage
+            input_tokens = response.usage.input_tokens
+            output_tokens = response.usage.output_tokens
+            cost = self.cost_tracker.track_usage(
+                model=self.model, 
+                input_tokens=input_tokens, 
+                output_tokens=output_tokens,
+                operation="experiment_design"
+            )
+            
             experiment_design = {
                 "timestamp": datetime.datetime.now().isoformat(),
                 "objective": objective,
@@ -306,7 +451,12 @@ class RDAnalyticsAssistant:
                 "constraints": constraints,
                 "budget": budget,
                 "design": extract_text_from_content(response.content),
-                "session_id": self.session_id
+                "session_id": self.session_id,
+                "cost_info": {
+                    "input_tokens": input_tokens,
+                    "output_tokens": output_tokens,
+                    "cost": round(cost, 6)
+                }
             }
             
             # Log the experiment design
@@ -315,6 +465,9 @@ class RDAnalyticsAssistant:
             print("🔬 Experimental Design:")
             print("-" * 40)
             print(extract_text_from_content(response.content))
+            
+            # Print cost summary
+            self.cost_tracker.print_call_summary("Experiment Design", cost, input_tokens, output_tokens)
             
             return experiment_design
             
@@ -364,13 +517,28 @@ class RDAnalyticsAssistant:
                 messages=[{"role": "user", "content": prompt}]
             )
             
+            # Track cost and usage
+            input_tokens = response.usage.input_tokens
+            output_tokens = response.usage.output_tokens
+            cost = self.cost_tracker.track_usage(
+                model=self.model, 
+                input_tokens=input_tokens, 
+                output_tokens=output_tokens,
+                operation="technical_report_generation"
+            )
+            
             report = {
                 "timestamp": datetime.datetime.now().isoformat(),
                 "audience": audience,
                 "report_type": report_type,
                 "data_summary": data_str[:500] + "..." if len(data_str) > 500 else data_str,
                 "report_content": extract_text_from_content(response.content),
-                "session_id": self.session_id
+                "session_id": self.session_id,
+                "cost_info": {
+                    "input_tokens": input_tokens,
+                    "output_tokens": output_tokens,
+                    "cost": round(cost, 6)
+                }
             }
             
             # Log and save the report
@@ -382,6 +550,9 @@ class RDAnalyticsAssistant:
             report_text = extract_text_from_content(response.content)
             print(report_text[:1000] + "..." if len(report_text) > 1000 else report_text)
             print(f"\n💾 Full report saved to: {self.reports_dir}/technical_report_{self.session_id}.md")
+            
+            # Print cost summary
+            self.cost_tracker.print_call_summary("Technical Report", cost, input_tokens, output_tokens)
             
             return report
             
@@ -430,12 +601,27 @@ class RDAnalyticsAssistant:
                 messages=[{"role": "user", "content": prompt}]
             )
             
+            # Track cost and usage
+            input_tokens = response.usage.input_tokens
+            output_tokens = response.usage.output_tokens
+            cost = self.cost_tracker.track_usage(
+                model=self.model, 
+                input_tokens=input_tokens, 
+                output_tokens=output_tokens,
+                operation="metrics_tracking"
+            )
+            
             metrics_analysis = {
                 "timestamp": datetime.datetime.now().isoformat(),
                 "metrics": metrics,
                 "targets": targets,
                 "analysis": extract_text_from_content(response.content),
-                "session_id": self.session_id
+                "session_id": self.session_id,
+                "cost_info": {
+                    "input_tokens": input_tokens,
+                    "output_tokens": output_tokens,
+                    "cost": round(cost, 6)
+                }
             }
             
             # Log the metrics analysis
@@ -444,6 +630,9 @@ class RDAnalyticsAssistant:
             print("📊 Metrics Analysis:")
             print("-" * 40)
             print(extract_text_from_content(response.content))
+            
+            # Print cost summary
+            self.cost_tracker.print_call_summary("Metrics Tracking", cost, input_tokens, output_tokens)
             
             # Save metrics data
             self._save_metrics_data(metrics_analysis)
@@ -558,16 +747,51 @@ class RDAnalyticsAssistant:
                     target = metrics.get('targets', {}).get(metric, 'N/A')
                     writer.writerow([metric, value, target, metrics['timestamp']])
 
+    def _save_cost_data(self):
+        """Save cost tracking data to CSV"""
+        filename = f"costs_{self.session_id}.csv"
+        filepath = self.data_dir / filename
+        
+        cost_summary = self.cost_tracker.get_summary()
+        
+        with open(filepath, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['Timestamp', 'Operation', 'Model', 'Input_Tokens', 'Output_Tokens', 'Input_Cost', 'Output_Cost', 'Total_Cost'])
+            
+            for call in cost_summary['calls']:
+                writer.writerow([
+                    call['timestamp'],
+                    call['operation'],
+                    call['model'],
+                    call['input_tokens'],
+                    call['output_tokens'],
+                    call['input_cost'],
+                    call['output_cost'],
+                    call['total_cost']
+                ])
+        
+        # Also save summary as JSON
+        summary_filename = f"cost_summary_{self.session_id}.json"
+        summary_filepath = self.data_dir / summary_filename
+        
+        with open(summary_filepath, 'w') as f:
+            json.dump(cost_summary, f, indent=2)
+
     def get_session_summary(self) -> Dict[str, Any]:
         """Get summary of current session activities"""
         print(f"\n📋 Session Summary - {self.session_id}")
         print("=" * 60)
+        
+        # Save cost data before generating summary
+        self._save_cost_data()
+        cost_summary = self.cost_tracker.get_summary()
         
         summary = {
             "session_id": self.session_id,
             "total_operations": len(self.results_log),
             "operation_types": {},
             "files_created": [],
+            "cost_summary": cost_summary,
             "timestamp": datetime.datetime.now().isoformat()
         }
         
@@ -588,6 +812,28 @@ class RDAnalyticsAssistant:
         print(f"📁 Files created: {len(summary['files_created'])}")
         for file_path in summary['files_created']:
             print(f"  - {file_path}")
+        
+        # Print detailed cost summary
+        print(f"\n💰 Cost Summary:")
+        print(f"  - Total API calls: {cost_summary['total_api_calls']}")
+        print(f"  - Total tokens used: {cost_summary['total_tokens']:,}")
+        print(f"    • Input tokens: {cost_summary['total_input_tokens']:,}")
+        print(f"    • Output tokens: {cost_summary['total_output_tokens']:,}")
+        print(f"  - Total cost: ${cost_summary['total_cost']:.6f}")
+        print(f"  - Average cost per call: ${cost_summary['average_cost_per_call']:.6f}")
+        
+        print(f"\n💡 Cost Breakdown by Operation:")
+        operation_costs = {}
+        for call in cost_summary['calls']:
+            op = call['operation']
+            if op not in operation_costs:
+                operation_costs[op] = {'calls': 0, 'cost': 0.0, 'tokens': 0}
+            operation_costs[op]['calls'] += 1
+            operation_costs[op]['cost'] += call['total_cost']
+            operation_costs[op]['tokens'] += call['input_tokens'] + call['output_tokens']
+        
+        for operation, data in operation_costs.items():
+            print(f"  - {operation}: {data['calls']} calls, {data['tokens']:,} tokens, ${data['cost']:.6f}")
         
         return summary
 
@@ -709,6 +955,14 @@ def demonstrate_rd_analytics():
     print(f"\n🎉 R&D Analytics Demo Complete!")
     print(f"📁 All outputs saved to: {rd.output_dir}")
     print(f"📊 Session ID: {rd.session_id}")
+    
+    # Final cost summary
+    final_cost = rd.cost_tracker.get_summary()
+    print(f"\n💰 Final Cost Summary:")
+    print(f"   Total API calls: {final_cost['total_api_calls']}")
+    print(f"   Total tokens: {final_cost['total_tokens']:,}")
+    print(f"   Total cost: ${final_cost['total_cost']:.6f}")
+    print(f"   💡 Cost per operation: ${final_cost['average_cost_per_call']:.6f}")
 
 
 def main():
