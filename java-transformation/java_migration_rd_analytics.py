@@ -66,7 +66,7 @@ class JavaMigrationRDAnalytics(RDAnalyticsAssistant):
         self.analysis_dir = self.output_dir / "analysis"
         self.analysis_dir.mkdir(exist_ok=True)
         
-        self.code_samples_dir = self.output_dir / "code-samples"
+        self.code_samples_dir = script_dir / "code-samples"
         self.code_samples_dir.mkdir(exist_ok=True)
         
         self.migration_plans_dir = self.output_dir / "migration-plans"
