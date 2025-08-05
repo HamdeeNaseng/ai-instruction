@@ -19,7 +19,7 @@ $env:ANTHROPIC_API_KEY = "your-api-key-here"
 claude-demos
 
 # Or run specific demos
-python src/claude_api_demos/basic_demo.py
+ python src/claude_api_demos/cli.py
 ```
 
 ## � Package Features
