@@ -9,14 +9,68 @@ This project provides an AI-powered Java transformation system that converts leg
 # Set your API key
 $env:ANTHROPIC_API_KEY = "your-api-key-here"
 
-# Navigate to the transformation directory
-cd java-transformation
+# Or create .env file in root directory
+echo "ANTHROPIC_API_KEY=your-api-key-here" > .env
 ```
 
-### 2. Run Transformation
+### 2. AI-Guided Interactive Migration (Recommended)
 ```powershell
-# Transform legacy Java project
+# Run the step-by-step AI migration system from root directory
+python run_ai_migration.py
+```
+
+### 3. Direct Transformation Engine (Advanced)
+```powershell
+# Navigate to the transformation directory
+cd java-transformation
+
+# Transform legacy Java project directly
 python java_transform.py
+```
+
+## 🤖 AI-Guided Migration System
+
+The `run_ai_migration.py` script provides an **interactive, step-by-step migration experience** that guides you through the entire Java modernization process.
+
+### Features
+- **Interactive Setup** - Step-by-step project selection and configuration
+- **AI-Powered Analysis** - Comprehensive legacy code assessment
+- **Guided Decision Making** - Choose migration strategy and options
+- **Progress Tracking** - Visual progress indicators and session management
+- **Error Recovery** - Built-in error handling and retry mechanisms
+- **Comprehensive Reporting** - Detailed migration reports and documentation
+
+### Migration Workflow
+
+1. **📁 Project Selection** - Choose your legacy Java project
+2. **🎯 Migration Strategy** - Define approach (Full/Partial/Analysis Only)
+3. **🔍 Legacy Analysis** - AI analyzes your existing codebase
+4. **📋 Transformation Planning** - Create detailed migration plan
+5. **💻 Code Generation** - Generate modern Spring Boot application
+6. **🧪 Testing & Validation** - Test and validate generated code
+7. **📄 Final Report** - Comprehensive migration documentation
+
+### Prerequisites
+- Python 3.8+
+- Claude API key (Anthropic)
+- Legacy Java project to migrate
+
+### Usage Example
+```powershell
+# 1. Set up your API key
+$env:ANTHROPIC_API_KEY = "sk-ant-api03-..."
+
+# 2. Run the interactive migration
+python run_ai_migration.py
+
+# Follow the interactive prompts:
+# ✅ Python 3.13.1
+# ✅ Claude API Key: sk-ant-a...GwAA
+# ✅ Sample Java Project: imedX (12 Java files)
+# ✅ Required Python modules available
+# 
+# 📊 System Status: 4/4 checks passed
+# 🚀 All systems ready! Starting AI-guided migration...
 ```
 
 ## 📁 Project Structure

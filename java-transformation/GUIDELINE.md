@@ -31,7 +31,7 @@ This guideline provides a structured approach for AI agents to analyze, transfor
 
 ## Project Overview
 - Project Name: [NAME]
-- Java Version: [VERSION]
+- Java Version: [VERSION] 
 - Build Tool: [MAVEN/GRADLE]
 - Framework: [FRAMEWORK OR NONE]
 - Estimated LOC: [NUMBER]
