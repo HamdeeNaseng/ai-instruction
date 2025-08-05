@@ -1,0 +1,7 @@
+Timestamp,Operation,Model,Input_Tokens,Output_Tokens,Input_Cost,Output_Cost,Total_Cost
+2025-08-05T10:43:06.719414,experimental_data_analysis,claude-3-5-sonnet-20241022,306,626,0.000918,0.00939,0.010308
+2025-08-05T10:43:17.913705,results_interpretation,claude-3-5-sonnet-20241022,274,501,0.000822,0.007515,0.008337
+2025-08-05T10:43:33.367973,decision_matrix_generation,claude-3-5-sonnet-20241022,245,835,0.000735,0.012525,0.01326
+2025-08-05T10:43:51.170448,experiment_design,claude-3-5-sonnet-20241022,258,861,0.000774,0.012915,0.013689
+2025-08-05T10:44:06.080842,metrics_tracking,claude-3-5-sonnet-20241022,322,766,0.000966,0.01149,0.012456
+2025-08-05T10:44:23.232350,technical_report_generation,claude-3-5-sonnet-20241022,4589,737,0.013767,0.011055,0.024822

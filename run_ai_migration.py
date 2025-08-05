@@ -32,9 +32,10 @@ try:
 except ImportError:
     print("⚠️ python-dotenv not installed, using system environment variables")
 
-# Add java-transformation directory to path for importing modules
+# Add java-transformation directory to path for importing phase modules
 java_transform_dir = Path(__file__).parent / "java-transformation"
-sys.path.insert(0, str(java_transform_dir))
+if str(java_transform_dir) not in sys.path:
+    sys.path.insert(0, str(java_transform_dir))
 
 def print_banner():
     """Print the application banner"""
@@ -370,7 +371,7 @@ class AIGuidedMigration:
             if str(java_transform_path) not in sys.path:
                 sys.path.insert(0, str(java_transform_path))
             
-            from java_migration_rd_analytics import JavaMigrationRDAnalytics
+            from phase1_legacy_analysis import JavaMigrationRDAnalytics
             
             analyzer = JavaMigrationRDAnalytics()
             project_path = Path(self.migration_state["source_project"])
@@ -442,7 +443,7 @@ class AIGuidedMigration:
             java_transform_path = Path(__file__).parent / "java-transformation"
             if str(java_transform_path) not in sys.path:
                 sys.path.insert(0, str(java_transform_path))
-            from java_transform import JavaTransformationEngine
+            from phase2_transformation_planning import JavaTransformationEngine
             
             project_path = self.migration_state["source_project"]
             transformer = JavaTransformationEngine(project_path)
@@ -483,6 +484,15 @@ class AIGuidedMigration:
                 )
                 planning_results["phase3"] = phase3_result
             
+            # Phase 5: R&D Analytics & Performance Analysis
+            if confirm_action("Run Phase 5 (R&D Analytics & Performance Analysis)?", default=False):
+                phase5_result = run_step_with_progress(
+                    "Executing Phase 5 - R&D Analytics & Performance Analysis",
+                    self._run_transformation_phase,
+                    transformer, 5
+                )
+                planning_results["phase5"] = phase5_result
+            
             self.migration_state["results"]["transformation_planning"] = planning_results
             self.migration_state["total_cost"] += getattr(transformer, "total_cost", 0.0)
             
@@ -517,7 +527,7 @@ class AIGuidedMigration:
             return
         
         try:
-            from java_transform import JavaTransformationEngine
+            from phase2_transformation_planning import JavaTransformationEngine
             
             project_path = self.migration_state["source_project"]
             transformer = JavaTransformationEngine(project_path)
@@ -596,7 +606,7 @@ class AIGuidedMigration:
             return
         
         try:
-            from java_runner_fix_and_debug import SpringBootRunnerAnalyzer
+            from phase4_error_checking import SpringBootRunnerAnalyzer
             
             app_path = code_gen_result["application_directory"] 
             print(f"🧪 Testing application at: {Path(app_path).name}")
@@ -684,7 +694,7 @@ class AIGuidedMigration:
             self.migration_state["transformation_results"]["phase2"] = phase2_result
             return phase2_result
         elif phase_number == 3:
-            # Phase 3: Modern Implementation
+            # Phase 3: Modern Implementation Design
             phase1_result = self.migration_state.get("transformation_results", {}).get("phase1", {})
             phase2_result = self.migration_state.get("transformation_results", {}).get("phase2", {})
             phase3_result = transformer.execute_phase3_modern_implementation(phase1_result, phase2_result)
@@ -698,6 +708,23 @@ class AIGuidedMigration:
             phase4_result = transformer.execute_phase4_code_generation(phase1_result, phase2_result, phase3_result)
             self.migration_state["transformation_results"]["phase4"] = phase4_result
             return phase4_result
+        elif phase_number == 5:
+            # Phase 5: Performance Testing & Analytics
+            try:
+                from phase5_test_performances import RDAnalyticsAssistant
+                rd_analytics = RDAnalyticsAssistant()
+                
+                # Run performance analysis on previous results
+                all_results = self.migration_state.get("transformation_results", {})
+                phase5_result = rd_analytics.generate_technical_report(
+                    all_results, 
+                    f"Java Migration Analysis - Session {self.session_id}"
+                )
+                self.migration_state["transformation_results"]["phase5"] = phase5_result
+                return phase5_result
+            except ImportError:
+                print("⚠️ Phase 5 performance testing not available")
+                return {"status": "skipped", "reason": "module_not_available"}
         else:
             raise ValueError(f"Invalid phase number: {phase_number}")
 

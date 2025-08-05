@@ -19,6 +19,16 @@ This guideline provides a structured approach for AI agents to analyze, transfor
 6. **Design New Structure** → Generate `NEW_JAVA_STRUCTURE.md`
 7. **Analyze New Architecture** → Generate `ANALYTIC_NEW_JAVA.md`
 
+## Phase 4: Check error after generate code java
+8. **Read Project of Generated**
+9. **Fix error it can CRUD file of generated**
+10. **Test running**
+
+## Phase 5: Test Performances
+11. **Install project**
+12. **Running**
+13. **Report Performances as logs metric cost** 
+
 ## Document Templates
 
 ### 1. OLD_JAVA_STRUCTURE.md

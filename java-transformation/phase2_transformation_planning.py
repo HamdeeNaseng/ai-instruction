@@ -37,8 +37,8 @@ sys.path.insert(0, str(src_path))
 sys.path.insert(0, str(parent_dir))
 
 try:
-    from rd_analytics_demo import RDAnalyticsAssistant, extract_text_from_content, CostTracker
-    from java_migration_rd_analytics import JavaMigrationRDAnalytics
+    from rd_analytics import RDAnalyticsAssistant, extract_text_from_content, CostTracker
+    from phase1_legacy_analysis import JavaMigrationRDAnalytics
 except ImportError as e:
     print(f"❌ Error: Could not import required modules: {e}")
     print("   Attempting alternative import paths...")
@@ -49,10 +49,10 @@ except ImportError as e:
         import sys
         import importlib.util
         
-        # Load rd_analytics_demo directly
-        rd_analytics_path = parent_dir / "src" / "claude_api_demos" / "rd_analytics_demo.py"
+        # Load rd_analytics directly
+        rd_analytics_path = parent_dir / "src" / "claude_api_demos" / "rd_analytics.py"
         if rd_analytics_path.exists():
-            spec = importlib.util.spec_from_file_location("rd_analytics_demo", rd_analytics_path)
+            spec = importlib.util.spec_from_file_location("rd_analytics", rd_analytics_path)
             if spec is not None and spec.loader is not None:
                 rd_analytics_module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(rd_analytics_module)
@@ -62,7 +62,7 @@ except ImportError as e:
                 extract_text_from_content = rd_analytics_module.extract_text_from_content
                 CostTracker = rd_analytics_module.CostTracker
                 
-                from java_migration_rd_analytics import JavaMigrationRDAnalytics
+                from phase1_legacy_analysis import JavaMigrationRDAnalytics
                 print("✅ Successfully imported using direct module loading")
             else:
                 raise ImportError("Could not create module spec")
