@@ -452,6 +452,10 @@ class AIGuidedMigration:
             # Run planning phases
             planning_results = {}
             
+            # Initialize transformation results storage
+            if "transformation_results" not in self.migration_state:
+                self.migration_state["transformation_results"] = {}
+            
             # Phase 1: Legacy Analysis
             if confirm_action("Run Phase 1 (Legacy Analysis)?", default=True):
                 phase1_result = run_step_with_progress(
@@ -519,6 +523,10 @@ class AIGuidedMigration:
             transformer = JavaTransformationEngine(project_path)
             
             print("🤖 AI is generating your Spring Boot application...")
+            
+            # Initialize transformation results storage if not already done
+            if "transformation_results" not in self.migration_state:
+                self.migration_state["transformation_results"] = {}
             
             # Phase 4: Code Generation
             phase4_result = run_step_with_progress(
@@ -663,25 +671,32 @@ class AIGuidedMigration:
         """Run a specific transformation phase"""
         if phase_number == 1:
             # Phase 1: Legacy Analysis
-            phase1_result = transformer._phase1_legacy_analysis()
+            phase1_result = transformer.execute_phase1_legacy_analysis()
+            # Store result in our migration state for later phases
+            if "transformation_results" not in self.migration_state:
+                self.migration_state["transformation_results"] = {}
+            self.migration_state["transformation_results"]["phase1"] = phase1_result
             return phase1_result
         elif phase_number == 2:
             # Phase 2: Transformation Planning
-            phase1_result = transformer.migration_state.get("phase1", {})
-            phase2_result = transformer._phase2_transformation_planning(phase1_result)
+            phase1_result = self.migration_state.get("transformation_results", {}).get("phase1", {})
+            phase2_result = transformer.execute_phase2_transformation_planning(phase1_result)
+            self.migration_state["transformation_results"]["phase2"] = phase2_result
             return phase2_result
         elif phase_number == 3:
             # Phase 3: Modern Implementation
-            phase1_result = transformer.migration_state.get("phase1", {})
-            phase2_result = transformer.migration_state.get("phase2", {})
-            phase3_result = transformer._phase3_modern_implementation(phase1_result, phase2_result)
+            phase1_result = self.migration_state.get("transformation_results", {}).get("phase1", {})
+            phase2_result = self.migration_state.get("transformation_results", {}).get("phase2", {})
+            phase3_result = transformer.execute_phase3_modern_implementation(phase1_result, phase2_result)
+            self.migration_state["transformation_results"]["phase3"] = phase3_result
             return phase3_result
         elif phase_number == 4:
             # Phase 4: Code Generation
-            phase1_result = transformer.migration_state.get("phase1", {})
-            phase2_result = transformer.migration_state.get("phase2", {})
-            phase3_result = transformer.migration_state.get("phase3", {})
-            phase4_result = transformer._phase4_code_generation(phase1_result, phase2_result, phase3_result)
+            phase1_result = self.migration_state.get("transformation_results", {}).get("phase1", {})
+            phase2_result = self.migration_state.get("transformation_results", {}).get("phase2", {})
+            phase3_result = self.migration_state.get("transformation_results", {}).get("phase3", {})
+            phase4_result = transformer.execute_phase4_code_generation(phase1_result, phase2_result, phase3_result)
+            self.migration_state["transformation_results"]["phase4"] = phase4_result
             return phase4_result
         else:
             raise ValueError(f"Invalid phase number: {phase_number}")

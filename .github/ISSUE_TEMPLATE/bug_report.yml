@@ -2,7 +2,7 @@ name: Bug Report
 description: Report a bug or issue with the Claude API Demos
 title: "[BUG] "
 labels: ["bug", "needs-triage"]
-assignees: ""
+# assignees: ""
 
 body:
   - type: markdown
