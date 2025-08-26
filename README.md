@@ -2,7 +2,10 @@
 
 This project provides comprehensive demonstrations of the Anthropic Claude API, packaged as a professional Python library with full VS Code integration. Inspired by the [DataCamp Claude tutorial](https://www.datacamp.com/tutorial/claude-code).
 
-## <iframe src="https://www.canva.com/design/DAGvEhuRSOw/0IChEvcsc29Jl9l92yqEEA/edit?utm_content=DAGvEhuRSOw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" width="100%" height="500"></iframe>
+
+## [Slide AI INSTRUCTION]("https://www.canva.com/design/DAGvEhuRSOw/zY3r_FQYtsCLPLQaUaW0fg/view?utm_content=DAGvEhuRSOw&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h517c4cbccb")
+
+## <iframe src="https://www.canva.com/design/DAGvEhuRSOw/zY3r_FQYtsCLPLQaUaW0fg/view?utm_content=DAGvEhuRSOw&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h517c4cbccb" width="100%" height="500"></iframe>
 
 ## 🚀 Quick Start
 
