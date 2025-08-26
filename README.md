@@ -2,6 +2,8 @@
 
 This project provides an AI-powered Java transformation system that converts legacy Java applications to modern Spring Boot applications using Claude API.
 
+## [Slide AI Instruction](https://www.canva.com/design/DAGvEhuRSOw/0IChEvcsc29Jl9l92yqEEA/edit?utm_content=DAGvEhuRSOw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
 ## 🚀 Quick Start
 
 ### 1. Setup Environment
