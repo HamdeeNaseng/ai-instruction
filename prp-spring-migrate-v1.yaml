@@ -1,0 +1,57 @@
+prp_id: "prp-spring-migrate-springboot-v1"
+metadata:
+  author: "research-team"
+  created_at: "2025-09-03"
+  version: "1.0.0"
+business_context:
+  product_vision: "Migrate legacy Spring Boot service to Spring Boot 3.x and Java 17"
+  kpis:
+    build_success: true
+    tests_pass: 0  # expected failing tests = 0
+system_role:
+  persona: "Senior Java migration engineer"
+domain_context:
+  kb:
+    - file: "docs/migration_notes.md"
+  banned_actions: ["commit_secrets", "remove_tests"]
+codebase_context:
+  repo_url: "file://./sample-svc"   # local path in demo
+  important_files:
+    - "pom.xml"
+    - "src/main/java/**"
+    - "src/test/java/**"
+    - "./"
+task_spec:
+  objective: "Migrate project to Spring Boot 3.x and Java 17, preserve behavior and pass all tests"
+  inputs: ["repo"]
+  outputs: ["patched_repo", "migration_report.md", "validation_report.json"]
+  acceptance_criteria:
+    - name: "build_pass"
+      command: "mvn -T 1C -DskipTests=false clean package"
+      expected_exit_code: 0
+    - name: "unit_tests"
+      command: "mvn test"
+      expected_exit_code: 0
+    - name: "health_check"
+      command: "curl -sS http://localhost:8080/actuator/health | jq .status"
+      expected_stdout: "\"UP\""
+tools:
+  allowed:
+    - name: "shell"
+      signature: "run(cmd) -> {exit_code, stdout, stderr}"
+validation:
+  scripts:
+    - "./scripts/run_validations.sh"
+examples:
+  - name: "happy_path"
+    input: "small REST service"
+    expected: "build OK, tests pass, actuator UP"
+memory_policy:
+  persist: ["migration_report.md"]
+cost_policy:
+  token_budget: 2500
+  max_steps: 10
+audit_hooks:
+  capture: ["prp_version", "tool_calls", "diffs_applied"]
+evaluation:
+  metrics: ["task_success_rate", "token_cost", "latency_ms"]
